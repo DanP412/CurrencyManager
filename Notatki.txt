@@ -1,0 +1,8 @@
+
+PROJEKTY:
+
+- CurrencyManager.ConsoleApp - Projekt, który tylko i wy³¹cznie zajmuje siê prezentacj¹ danych, nie powinien posiadaæ ¿adnej logiki
+
+- CurrencyManager.Logic - Projekt, który tylko i wy³¹cznie ogarnia logikê, nie powinien mieæ ani jednego odniesienia siê do klasy Console
+
+- CurrencyManager.Data - Projekt utrwalania danych

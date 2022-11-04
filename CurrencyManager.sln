@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyManager.ConsoleApp", "CurrencyManager.ConsoleApp\CurrencyManager.ConsoleApp.csproj", "{9B0A04AF-A4FE-4A26-B9B4-53F10C45E588}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyManager.Logic", "CurrencyManager.Logic\CurrencyManager.Logic.csproj", "{586A66DC-AF1E-4B49-827C-A83C30B1ED06}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyManager.Data", "CurrencyManager.Data\CurrencyManager.Data.csproj", "{4C420C96-74A7-4D23-AB53-1839C477F475}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{15CCFCE4-6BCD-40D5-8D49-E2B5C59DF4D2}"
+	ProjectSection(SolutionItems) = preProject
+		Notatki.txt = Notatki.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B0A04AF-A4FE-4A26-B9B4-53F10C45E588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B0A04AF-A4FE-4A26-B9B4-53F10C45E588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B0A04AF-A4FE-4A26-B9B4-53F10C45E588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B0A04AF-A4FE-4A26-B9B4-53F10C45E588}.Release|Any CPU.Build.0 = Release|Any CPU
+		{586A66DC-AF1E-4B49-827C-A83C30B1ED06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{586A66DC-AF1E-4B49-827C-A83C30B1ED06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{586A66DC-AF1E-4B49-827C-A83C30B1ED06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{586A66DC-AF1E-4B49-827C-A83C30B1ED06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C420C96-74A7-4D23-AB53-1839C477F475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C420C96-74A7-4D23-AB53-1839C477F475}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C420C96-74A7-4D23-AB53-1839C477F475}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C420C96-74A7-4D23-AB53-1839C477F475}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3912F3D5-9CF0-4421-BC6E-6FBED26B5C0D}
+	EndGlobalSection
+EndGlobal
