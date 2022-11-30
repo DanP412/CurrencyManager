@@ -8,8 +8,5 @@ namespace CurrencyManager.Logic.Models
 
         public string Code { get; set; }
 
-        public string Symbol { get; set; }
-
-        public List<string> Countries { get; set; }
     }
 }

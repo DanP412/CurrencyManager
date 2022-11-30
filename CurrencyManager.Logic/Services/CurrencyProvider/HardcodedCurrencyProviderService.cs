@@ -9,10 +9,10 @@ namespace CurrencyManager.Logic.Services.CurrencyProvider
     {
         private readonly List<Currency> _currencies = new List<Currency>
         {
-            new Currency { Name = "złoty", Code = "PLN", Symbol = "zł", Countries = new List<string> { "Polska" } },
-            new Currency { Name = "dolar", Code = "USD", Symbol = "$", Countries = new List<string> { "Stany Zjednoczone" } },
-            new Currency { Name = "Brytyjski funt szterling", Code = "GBP", Symbol = "£", Countries = new List<string> { "Polska" } },
-            new Currency { Name = "euro", Code = "EUR", Symbol = "€", Countries = new List<string> { "Polska" } }
+            new Currency { Name = "złoty", Code = "PLN" },
+            new Currency { Name = "dolar", Code = "USD" },
+            new Currency { Name = "Brytyjski funt szterling", Code = "GBP" },
+            new Currency { Name = "euro", Code = "EUR" }
         };
 
         public async Task<List<Currency>> GetCurrenciesAsync()

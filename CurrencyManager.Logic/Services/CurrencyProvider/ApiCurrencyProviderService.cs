@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CurrencyManager.Logic.Services.CurrencyProvider
@@ -10,51 +11,19 @@ namespace CurrencyManager.Logic.Services.CurrencyProvider
     public class ApiCurrencyProviderService : ICurrencyProviderService
     {
         private readonly string _apiUrl = "https://api.apilayer.com";
+        private readonly string _apiEndpoint = "exchangerates_data/symbols";
+        private readonly string _developmentKey = "wtPTiykGgPLBEZPD3wZDxPlBZMYjbmIl";
 
         public async Task<List<Currency>> GetCurrenciesAsync()
         {
-            var restClientOptions = new RestClientOptions(_apiUrl)
-            {
-                ThrowOnAnyError = true,
-                MaxTimeout = 1000
-            };
+            string currenciesJson = await GetCurrenciesPropertiesAsync();
 
-            var restClient = new RestClient(restClientOptions);
+            var currencies = ConvertJsonStringToCurrencies(currenciesJson);
 
-            string resource = "exchangerates_data/symbols";
-
-            var restRequest = new RestRequest(resource);
-
-            restRequest.AddHeader("apikey", "wtPTiykGgPLBEZPD3wZDxPlBZMYjbmIl");
-
-            // Pobranie danych cząstkowych (2 pola)
-
-            // Pobranie brakujących danych
-
-            // Sklejenie wszystkich danych z powyższych strzałów do różnych api w jedną spójną List<Currency> (bo tak nakazuje interfejs ICurrencyProviderService)
-
-            // 2 prywatne metody na 2 strzały do api (obydwie zwracają JObject)
-            // 1 metoda prywatna łącząca te 2 powyższe informacje i zwracająca ostateczny wynik, który powinna zwrócić metoda główna (publiczna)
-
-            try
-            {
-                var restResponse = await restClient.GetAsync(restRequest);
-
-                string jsonResponse = restResponse.Content;
-
-                JObject json = JObject.Parse(jsonResponse);
-
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
-            
-            return null;
+            return currencies.ToList();
         }
 
-        public async Task<JObject> GetCurrenciesPropertiesAsync()
+        private async Task<string> GetCurrenciesPropertiesAsync()
         {
             var restClientOptions = new RestClientOptions(_apiUrl)
             {
@@ -63,45 +32,70 @@ namespace CurrencyManager.Logic.Services.CurrencyProvider
             };
 
             var restClient = new RestClient(restClientOptions);
-            string resource = "exchangerates_data/symbols";
 
-            var restRequest = new RestRequest(resource);
-            restRequest.AddHeader("apikey", "wtPTiykGgPLBEZPD3wZDxPlBZMYjbmIl");
+            var restRequest = new RestRequest(_apiEndpoint, Method.Get);
 
+            restRequest.AddHeader("apikey", _developmentKey);
 
             var restResponse = await restClient.GetAsync(restRequest);
+
             string jsonResponse = restResponse.Content;
 
-            JObject json = JObject.Parse(jsonResponse);
-            
-
-            return json;
+            return jsonResponse;
         }
 
-        //public async Task<JObject> GetCurrenciesPropertiesAsync()
-        //{
-        //    var restClientOptions = new RestClientOptions(_apiUrl)
-        //    {
-        //        ThrowOnAnyError = true,
-        //        MaxTimeout = 1000
-        //    };
+        private List<Currency> ConvertJsonStringToCurrencies(string currenciesJson)
+        {
+            JObject currenciesJObject = JObject.Parse(currenciesJson);
 
-        //    var restClient = new RestClient(restClientOptions);
-        //    string resource = "exchangerates_data/symbols";
+            var responseRootChildren = currenciesJObject.Children();
 
-        //    var restRequest = new RestRequest(resource);
-        //    restRequest.AddHeader("apikey", "wtPTiykGgPLBEZPD3wZDxPlBZMYjbmIl");
+            // symbols
+            var responseData = responseRootChildren.Skip(1).Single();
 
+            // symbols->dzieci
+            var responseDataRows = responseData.Children().Values();
 
-        //    var restResponse = await restClient.GetAsync(restRequest);
-        //    string jsonResponse = restResponse.Content;
+            List<Currency> currencies = new List<Currency>();
 
-        //    JObject json = JObject.Parse(jsonResponse);
+            foreach (var responseDataRow in responseDataRows)
+            {
+                string responseDataRowString = responseDataRow.ToString();
 
-        //    return json;
-        //}
+                var responseDataRowValues = responseDataRowString.Split(": ");
 
+                string name = responseDataRowValues[0].Replace("\"", string.Empty);
+                string value = responseDataRowValues[1].Replace("\"", string.Empty);
 
+                Currency currency = new Currency 
+                { 
+                    Code = name, 
+                    Name = value 
+                };
+
+                currencies.Add(currency);
+            }
+
+            return currencies;
+        }
+
+        public async Task<bool> CurrencyExists(string baseCurrency, string currencyToGet)
+        {
+            List<Currency> currencies = new List<Currency>();
+
+            bool isBaseCurrencyExist = currencies.Any(cur => cur.Code == baseCurrency.ToUpper());
+            bool isCurrencyToGetExist = currencies.Any(cur => cur.Code == currencyToGet.ToUpper());
+
+            if (!isBaseCurrencyExist)
+            {
+                throw new Exception("Bazowa waluta nie istnieje! ");
+            }
+            else if (!isCurrencyToGetExist)
+            {
+                throw new Exception("Waluta na którą checesz przewalutować nie istnieje! ");
+            }
+            return true;
+        }
 
     }
 }

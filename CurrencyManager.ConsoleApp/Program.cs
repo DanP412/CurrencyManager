@@ -18,11 +18,11 @@ namespace CurrencyManager.ConsoleApp
         private static IExchangeRatesService _exchangeRatesService;
         private static ICurrencyProviderService _currencyProviderService;
 
-        
+
         public static async Task Main(string[] args)
         {
             PerformDependencyInjectionBindings();
-            var test = await _currencyProviderService.GetCurrenciesAsync();
+
             while (true)
             {
                 Console.Clear();
@@ -41,41 +41,34 @@ namespace CurrencyManager.ConsoleApp
                 {
                     string currencyToPurchase = _consoleService.GetString("Wpisz rodzaj waluty krórą chcesz kupić: ");
                     string currencyToSell = _consoleService.GetString("Wpisz rodzaj waluty krórą chcesz sprzedać: ");
+                    decimal amount = _consoleService.GetDecimal("Podaj ilość pieniędzy do przewalutowania: ");
 
-                    bool currencyExists = _exchangeRatesService.CurrencyExists(currencyToPurchase, currencyToSell);
+                    decimal exchangeRate = await _exchangeRatesService.GetExchangeRateAsync(currencyToSell, currencyToPurchase, amount);
 
-                    if (currencyExists)
-                    {
-                        decimal exchangeRate = _exchangeRatesService.GetExchangeRate(currencyToPurchase, currencyToSell);
-
-                        Console.WriteLine($"\nkurs wynosi: {exchangeRate}\n");
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nPodaj poprawne dane!\n");
-                    }
+                    Console.WriteLine($"kurs waluty {currencyToSell} do {currencyToPurchase} wynosi: {exchangeRate}");
                 }
                 else if (option == 3)
                 {
                     string CurrencyToPurchase = _consoleService.GetString("Wpisz rodzaj waluty krórą chcesz kupić: ");
                     string CurrencyToSell = _consoleService.GetString("Wpisz rodzaj waluty krórą chcesz sprzedać: ");
-                    
-                    bool isValueExist = _exchangeRatesService.CurrencyExists(CurrencyToPurchase, CurrencyToSell);
+                    decimal amountOfMoney = _consoleService.GetDecimal("Podaj ilość pieniędzy do sprzedaży: ");
 
-                    if (isValueExist)
-                    {
-                        decimal amountOfMoney = _consoleService.GetDecimal("podaj ilość pieniędzy do przewalutowania: ", "Podaj poprawne dane! ");
+                    _exchangeRatesService.GetExchangeRateAsync(CurrencyToPurchase, CurrencyToSell, amountOfMoney);
 
-                        decimal ConvertedMoney = _exchangeRatesService.GetAmonuntOfExchangingMoney(CurrencyToPurchase, CurrencyToSell, amountOfMoney);
+                    //if (isValueExist)
+                    //{
+                    //    decimal amountOfMoney = _consoleService.GetDecimal("podaj ilość pieniędzy do przewalutowania: ", "Podaj poprawne dane! ");
 
-                        string convertedCurrencySymbol = await _exchangeRatesService.GetCurrencySymbolAsync(CurrencyToPurchase);
+                    //    decimal ConvertedMoney = _exchangeRatesService.GetAmonuntOfExchangingMoney(CurrencyToPurchase, CurrencyToSell, amountOfMoney);
 
-                        Console.WriteLine($"\ntwoje pieniądze po przewalutowaniu to {ConvertedMoney} {convertedCurrencySymbol}!\n  ");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Podaj Poprawne dane! ");
-                    }
+                    //    string convertedCurrencySymbol = await _exchangeRatesService.GetCurrencySymbolAsync(CurrencyToPurchase);
+
+                    //    Console.WriteLine($"\ntwoje pieniądze po przewalutowaniu to {ConvertedMoney} {convertedCurrencySymbol}!\n  ");
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("Podaj Poprawne dane! ");
+                    //}
                 }
 
                 Console.Write("\nNaciśnij dowolny przycisk, aby powrócić do menu głównego...");
@@ -88,7 +81,7 @@ namespace CurrencyManager.ConsoleApp
             _kernel.Bind<IMenuService>().To<MenuService>();
             _kernel.Bind<IConsoleService>().To<ConsoleService>();
             _kernel.Bind<ICurrencyProviderService>().To<ApiCurrencyProviderService>();
-            _kernel.Bind<IExchangeRatesService>().To<ExchangeRatesService>();
+            _kernel.Bind<IExchangeRatesService>().To<ApiExchangeRateService>();
 
             // Odpytanie kontenera o obiekt (on sam go utworzy oraz wszystkie potrzebne zależności, czyli co trzeba wsadzić w konstruktor)
             _menuService = _kernel.Get<IMenuService>();
