@@ -34,27 +34,25 @@ namespace CurrencyManager.Logic.Services.ExchangeRates
             };
         }
 
-        public async Task<string> GetExchangeRateAsync(string currencyToPurchase, string currencyToSell, decimal amonut)
+        public decimal GetExchangeRate(string currencyToPurchase, string currencyToSell)
         {
             string currencyToPurchaseUpper = currencyToPurchase.ToUpper();
             string currencyToSellUpper = currencyToSell.ToUpper();
 
             var exchangeRate = _exchangeRates.Single(er => er.CurrencyToPurchase.Code == currencyToPurchaseUpper && er.CurrencyToSell.Code == currencyToSellUpper);
-            throw new NotImplementedException();
 
-            return "S";
-            //return await exchangeRate.Rate;
+            return exchangeRate.Rate;
         }
 
 
-        //public async Task<decimal> GetAmonuntOfExchangingMoney(string currencyToPurchase, string currencyToSell, decimal amountOfmoney)
-        //{
-        //    decimal exchangeRate = await  GetExchangeRateAsync(currencyToPurchase, currencyToSell, amountOfmoney);
+        public decimal GetAmonuntOfExchangingMoney(string currencyToPurchase, string currencyToSell, decimal amountOfmoney)
+        {
+            decimal exchangeRate = GetExchangeRate(currencyToPurchase, currencyToSell);
 
-        //    decimal amonuntOfExchangingMoney = exchangeRate * amountOfmoney;
+            decimal amonuntOfExchangingMoney = exchangeRate * amountOfmoney;
 
-        //    return amonuntOfExchangingMoney;
-        //}
+            return amonuntOfExchangingMoney;
+        }
 
         public bool CurrencyExists(string currencyToPurchase, string currencyToSell)
         {
@@ -64,6 +62,17 @@ namespace CurrencyManager.Logic.Services.ExchangeRates
             bool currencyExists = _exchangeRates.Any(er => er.CurrencyToPurchase.Code == currencyToPurchaseUpper && er.CurrencyToSell.Code == currencyToSellUpper);
 
             return currencyExists;
+        }
+
+        public async Task<string> GetCurrencySymbolAsync(string currencyCode)
+        {
+            var currencies = await _currencyProviderService.GetCurrenciesAsync();
+
+            string currencyCodeUpper = currencyCode.ToUpper();
+
+            var currency = currencies.Single(c => c.Code == currencyCodeUpper);
+
+            return currency.Symbol;
         }
 
         // First - kiedy chcemy pierwszy pasujący obiekt z kolekcji (z założeniem, że na pewno jakiś tam szukany obiekt)
