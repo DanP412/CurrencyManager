@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model List<Currency>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Code</th>
+            </tr>
+        </thead>
+        @{
+            int rowNumber = 0;
+            foreach (var currency in Model)
+            {
+                <tr>
+                    <th scope="row">@rowNumber</th>
+                    <td>@currency.Name</td>
+                    <td>@currency.Code</td>
+                </tr>
+                rowNumber++;
+            }
+        }
+    </table>
+</div>

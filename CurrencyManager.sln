@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Notatki.txt = Notatki.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyManager.WebApp", "CurrencyManager.WebApp\CurrencyManager.WebApp.csproj", "{87F0334F-6371-43F2-B2ED-2C3296CD5B09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{4C420C96-74A7-4D23-AB53-1839C477F475}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C420C96-74A7-4D23-AB53-1839C477F475}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C420C96-74A7-4D23-AB53-1839C477F475}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87F0334F-6371-43F2-B2ED-2C3296CD5B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F0334F-6371-43F2-B2ED-2C3296CD5B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F0334F-6371-43F2-B2ED-2C3296CD5B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F0334F-6371-43F2-B2ED-2C3296CD5B09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
