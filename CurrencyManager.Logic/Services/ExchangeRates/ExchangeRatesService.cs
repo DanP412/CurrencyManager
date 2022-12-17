@@ -44,7 +44,6 @@ namespace CurrencyManager.Logic.Services.ExchangeRates
             return exchangeRate.Rate;
         }
 
-
         public decimal GetAmonuntOfExchangingMoney(string currencyToPurchase, string currencyToSell, decimal amountOfmoney)
         {
             decimal exchangeRate = GetExchangeRate(currencyToPurchase, currencyToSell);
@@ -64,16 +63,17 @@ namespace CurrencyManager.Logic.Services.ExchangeRates
             return currencyExists;
         }
 
-        public async Task<string> GetCurrencySymbolAsync(string currencyCode)
-        {
-            var currencies = await _currencyProviderService.GetCurrenciesAsync();
+        // Usunęliśmy symbol bo nie było w api
+        //public async Task<string> GetCurrencySymbolAsync(string currencyCode)
+        //{
+        //    var currencies = await _currencyProviderService.GetCurrenciesAsync();
 
-            string currencyCodeUpper = currencyCode.ToUpper();
+        //    string currencyCodeUpper = currencyCode.ToUpper();
 
-            var currency = currencies.Single(c => c.Code == currencyCodeUpper);
+        //    var currency = currencies.Single(c => c.Code == currencyCodeUpper);
 
-            return currency.Symbol;
-        }
+        //    return currency.Symbol;
+        //}
 
         // First - kiedy chcemy pierwszy pasujący obiekt z kolekcji (z założeniem, że na pewno jakiś tam szukany obiekt)
         // FirstOrDefault - kiedy chcemy pierwszy pasujący obiekt z kolekcji (z założeniem, że może nie być szukanego obiektu)

@@ -41,9 +41,9 @@ namespace CurrencyManager.ConsoleApp
                 {
                     string currencyToPurchase = _consoleService.GetString("Wpisz rodzaj waluty krórą chcesz kupić: ");
                     string currencyToSell = _consoleService.GetString("Wpisz rodzaj waluty krórą chcesz sprzedać: ");
-                    decimal amount = _consoleService.GetDecimal("Podaj ilość pieniędzy do przewalutowania: ");
+                    //decimal amount = _consoleService.GetDecimal("Podaj ilość pieniędzy do przewalutowania: ");
 
-                    decimal exchangeRate = await _exchangeRatesService.GetExchangeRateAsync(currencyToSell, currencyToPurchase, amount);
+                    decimal exchangeRate = _exchangeRatesService.GetExchangeRate(currencyToSell, currencyToPurchase);
 
                     Console.WriteLine($"kurs waluty {currencyToSell} do {currencyToPurchase} wynosi: {exchangeRate}");
                 }
@@ -53,7 +53,7 @@ namespace CurrencyManager.ConsoleApp
                     string CurrencyToSell = _consoleService.GetString("Wpisz rodzaj waluty krórą chcesz sprzedać: ");
                     decimal amountOfMoney = _consoleService.GetDecimal("Podaj ilość pieniędzy do sprzedaży: ");
 
-                    _exchangeRatesService.GetExchangeRateAsync(CurrencyToPurchase, CurrencyToSell, amountOfMoney);
+                    //_exchangeRatesService.GetExchangeRate(CurrencyToPurchase, CurrencyToSell, amountOfMoney);
 
                     //if (isValueExist)
                     //{
@@ -81,7 +81,7 @@ namespace CurrencyManager.ConsoleApp
             _kernel.Bind<IMenuService>().To<MenuService>();
             _kernel.Bind<IConsoleService>().To<ConsoleService>();
             _kernel.Bind<ICurrencyProviderService>().To<ApiCurrencyProviderService>();
-            _kernel.Bind<IExchangeRatesService>().To<ApiExchangeRateService>();
+            _kernel.Bind<IExchangeRatesService>().To<ExchangeRatesService>();
 
             // Odpytanie kontenera o obiekt (on sam go utworzy oraz wszystkie potrzebne zależności, czyli co trzeba wsadzić w konstruktor)
             _menuService = _kernel.Get<IMenuService>();

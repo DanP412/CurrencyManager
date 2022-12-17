@@ -10,6 +10,7 @@ namespace CurrencyManager.Logic.Services.ExchangeRates
         
         bool CurrencyExists(string currencyToPurchase, string currencyToSell);
 
-        Task<string> GetCurrencySymbolAsync(string currencyCode);
+        // Usunęliśmy symbol bo nie było w api
+        //Task<string> GetCurrencySymbolAsync(string currencyCode);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using CurrencyManager.Logic.Models;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -78,24 +77,5 @@ namespace CurrencyManager.Logic.Services.CurrencyProvider
 
             return currencies;
         }
-
-        public async Task<bool> CurrencyExists(string baseCurrency, string currencyToGet)
-        {
-            List<Currency> currencies = new List<Currency>();
-
-            bool isBaseCurrencyExist = currencies.Any(cur => cur.Code == baseCurrency.ToUpper());
-            bool isCurrencyToGetExist = currencies.Any(cur => cur.Code == currencyToGet.ToUpper());
-
-            if (!isBaseCurrencyExist)
-            {
-                throw new Exception("Bazowa waluta nie istnieje! ");
-            }
-            else if (!isCurrencyToGetExist)
-            {
-                throw new Exception("Waluta na którą checesz przewalutować nie istnieje! ");
-            }
-            return true;
-        }
-
     }
 }
