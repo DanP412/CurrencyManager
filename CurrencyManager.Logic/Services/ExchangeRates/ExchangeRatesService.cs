@@ -1,5 +1,6 @@
 ﻿using CurrencyManager.Logic.Models;
 using CurrencyManager.Logic.Services.CurrencyProvider;
+using CurrencyManager.Logic.Services.ExchangeRatesProvider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,28 +11,19 @@ namespace CurrencyManager.Logic.Services.ExchangeRates
     public class ExchangeRatesService : IExchangeRatesService
     {
         private readonly ICurrencyProviderService _currencyProviderService;
+        private readonly IExchangeRateProviderService _exchangeRateProviderService;
 
-        private readonly List<ExchangeRate> _exchangeRates;
+        private IEnumerable<ExchangeRate> _exchangeRates;
 
-        public ExchangeRatesService(ICurrencyProviderService currencyProviderService)
+        public ExchangeRatesService(ICurrencyProviderService currencyProviderService, IExchangeRateProviderService exchangeRateProviderService)
         {
             _currencyProviderService = currencyProviderService;
+            _exchangeRateProviderService = exchangeRateProviderService;
+        }
 
-            var currencyPLN = GetCurrencyByCodeAsync("PLN").Result;
-            var currencyEUR = GetCurrencyByCodeAsync("EUR").Result;
-            var currencyGBP = GetCurrencyByCodeAsync("GBP").Result;
-            var currencyUSD = GetCurrencyByCodeAsync("USD").Result;
-
-            _exchangeRates = new List<ExchangeRate>
-            {
-                new ExchangeRate { CurrencyToPurchase = currencyPLN, CurrencyToSell = currencyEUR, Rate = 4.22M },
-                new ExchangeRate { CurrencyToPurchase = currencyPLN, CurrencyToSell = currencyUSD, Rate = 4.22M },
-                new ExchangeRate { CurrencyToPurchase = currencyEUR, CurrencyToSell = currencyPLN, Rate = 4.22M },
-                new ExchangeRate { CurrencyToPurchase = currencyUSD, CurrencyToSell = currencyEUR, Rate = 1.00M },
-                new ExchangeRate { CurrencyToPurchase = currencyGBP, CurrencyToSell = currencyPLN, Rate = 0.18M },
-                new ExchangeRate { CurrencyToPurchase = currencyPLN, CurrencyToSell = currencyGBP, Rate = 5.60M },
-                new ExchangeRate { CurrencyToPurchase = currencyEUR, CurrencyToSell = currencyUSD, Rate = 1.00M }
-            };
+        public async Task InitializeData()
+        {
+            _exchangeRates = await _exchangeRateProviderService.GetExchangeRatesAsync();
         }
 
         public decimal GetExchangeRate(string currencyToPurchase, string currencyToSell)
@@ -53,39 +45,13 @@ namespace CurrencyManager.Logic.Services.ExchangeRates
             return amonuntOfExchangingMoney;
         }
 
-        public bool CurrencyExists(string currencyToPurchase, string currencyToSell)
+        public bool CurrencyExists(string currencyCode)
         {
-            string currencyToPurchaseUpper = currencyToPurchase.ToUpper();
-            string currencyToSellUpper = currencyToSell.ToUpper();
+            string currencyCodeUpper = currencyCode.ToUpper();
 
-            bool currencyExists = _exchangeRates.Any(er => er.CurrencyToPurchase.Code == currencyToPurchaseUpper && er.CurrencyToSell.Code == currencyToSellUpper);
+            bool currencyExists = _exchangeRates.Any(er => er.CurrencyToPurchase.Code == currencyCodeUpper);
 
             return currencyExists;
-        }
-
-        // Usunęliśmy symbol bo nie było w api
-        //public async Task<string> GetCurrencySymbolAsync(string currencyCode)
-        //{
-        //    var currencies = await _currencyProviderService.GetCurrenciesAsync();
-
-        //    string currencyCodeUpper = currencyCode.ToUpper();
-
-        //    var currency = currencies.Single(c => c.Code == currencyCodeUpper);
-
-        //    return currency.Symbol;
-        //}
-
-        // First - kiedy chcemy pierwszy pasujący obiekt z kolekcji (z założeniem, że na pewno jakiś tam szukany obiekt)
-        // FirstOrDefault - kiedy chcemy pierwszy pasujący obiekt z kolekcji (z założeniem, że może nie być szukanego obiektu)
-        // Single - kiedy chcemy dokładnie 1 szukany obiekt (z założeniem, że szukany obiekt tam jest i jest tylko 1 pasujący)
-        // SingleOrDefault - kiedy chcemy dokładnie 1 szukany obiekt (z założeniem, że może nie być szukanego obiektu)
-        private async Task<Currency> GetCurrencyByCodeAsync(string currencyCode)
-        {
-            var currencies = await _currencyProviderService.GetCurrenciesAsync();
-
-            var currency = currencies.Single(c => c.Code == currencyCode);
-
-            return currency;
         }
     }
 }

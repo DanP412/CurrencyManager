@@ -69,7 +69,7 @@ namespace CurrencyManager.Logic.Services.CurrencyProvider
                 Currency currency = new Currency 
                 { 
                     Code = name, 
-                    Name = value 
+                    Name = value
                 };
 
                 currencies.Add(currency);
